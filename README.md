@@ -18,15 +18,48 @@ Enabled plugins will become available to ALL projects. They sometimes trigger au
 Use the tailwindcss skill to style this component with dark mode support and responsive breakpoints.
 ```
 
-## What's Included
+## Plugins Included
 
 Plugins and skills curated from other sources, repackaged into `my-claude-plugins` marketplace for modular control.
 
-| My Plugin | Source Repo | Source Asset |
-| --- | --- | --- |
-| [tailwindcss](./plugins/tailwindcss) | [einverne/dotfiles](https://github.com/einverne/dotfiles) | [SKILL.md](https://github.com/einverne/dotfiles/blob/master/claude/skills/tailwindcss/SKILL.md) |
-| [shadcn-ui](./plugins/shadcn-ui) | [einverne/dotfiles](https://github.com/einverne/dotfiles) | [SKILL.md](https://github.com/einverne/dotfiles/blob/master/claude/skills/shadcn-ui/SKILL.md) |
-| [frontend-design](./plugins/frontend-design) | [anthropics/skills](https://github.com/anthropics/skills) | [SKILL.md](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md) |
+| My Plugin | Source Repo | Source Asset | 🔥 TO DO (write better skills) |
+| --- | --- | --- | --- |
+| [playwright-skill](https://github.com/lackeyjb/playwright-skill) | [lackeyjb/playwright-skill](https://github.com/lackeyjb/playwright-skill) | [SKILL.md](https://github.com/lackeyjb/playwright-skill/blob/main/skills/playwright/SKILL.md) | Remove: MCP tools more direct; stated API patterns aren't for automated testing. |
+| [frontend-design](./plugins/frontend-design) | [anthropics/skills](https://github.com/anthropics/skills) | [SKILL.md](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md) | Remove: Will break theming, brand new projects only. |
+| [shadcn-ui](./plugins/shadcn-ui) | [einverne/dotfiles](https://github.com/einverne/dotfiles) | [SKILL.md](https://github.com/einverne/dotfiles/blob/master/claude/skills/shadcn-ui/SKILL.md) | Edit heavily: component API patterns are valuable (see notes below) |
+| [tailwindcss](./plugins/tailwindcss) | [einverne/dotfiles](https://github.com/einverne/dotfiles) | [SKILL.md](https://github.com/einverne/dotfiles/blob/master/claude/skills/tailwindcss/SKILL.md) | Remove: basic knowledge and uses TW v3 |
+| [skill-creator](./plugins/skill-creator) | [anthropics/skills](https://github.com/anthropics/skills) | [SKILL.md](https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md) | Keep: official Anthropic skill for creating new skills |
+
+Shadcn/ui notes - "Claude Code would the plugin be useful in my project(s)?"
+
+```text
+My honest assessment
+
+This skill is the most useful of the four, but with caveats:
+
+Genuinely useful:
+- Component import patterns and API reference (these are stable)
+- Form validation with React Hook Form + Zod (you'll likely use this)
+- Loading states, error handling patterns
+- Doesn't conflict with your design philosophy (unlike frontend-design skill)
+
+Outdated/misleading:
+- Setup assumes tailwind.config.ts (you have none)
+- Colour format is HSL (you use OKLCH)
+- Configuration examples don't apply to Tailwind v4
+
+---
+My recommendation
+
+Consider enabling this one — it's the only skill that provides genuinely useful context without actively conflicting with your project's choices.
+
+However, note that:
+1. I'd need to ignore the setup/configuration sections
+2. Colour customisation examples won't match your OKLCH tokens
+3. The component usage patterns (imports, props, composition) are accurate and helpful
+
+Alternatively, a project-specific skill that references https://ui.shadcn.com/llms.txt (as mentioned on line 14 of the skill) plus documents your specific v4 + OKLCH setup would be more valuable.
+```
 
 ## About Plugins and Marketplaces
 
@@ -92,9 +125,10 @@ In my Next.js project file `.claude/settings.json` I have this configured and ch
     "playwright-skill@playwright-skill": true,
     "frontend-design@my-claude-plugins": true,
     "shadcn-ui@my-claude-plugins": true,
-    "tailwindcss@my-claude-plugins": false
+    "tailwindcss@my-claude-plugins": false,
+    "skill-creator@my-claude-plugins": true
   }
 }
 ```
 
-Which pertains to <https://github.com/lackeyjb/playwright-skill> (1 plugin enabled) and <https://github.com/michellepace/my-claude-plugins> (2 plugins enabled, 1 disabled).
+This configures two marketplaces: [playwright-skill](https://github.com/lackeyjb/playwright-skill) (1 plugin enabled) and [my-claude-plugins](https://github.com/michellepace/my-claude-plugins) (3 plugins enabled, 1 disabled).

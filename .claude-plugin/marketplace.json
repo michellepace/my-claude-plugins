@@ -18,6 +18,11 @@
       "name": "frontend-design",
       "source": "./plugins/frontend-design",
       "description": "Create distinctive, production-grade frontend interfaces with high design quality."
+    },
+    {
+      "name": "skill-creator",
+      "source": "./plugins/skill-creator",
+      "description": "Guide for creating effective skills that extend Claude's capabilities with specialized knowledge, workflows, or tool integrations."
     }
   ]
 }
