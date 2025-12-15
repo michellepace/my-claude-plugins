@@ -123,7 +123,8 @@ In my Next.js project file `.claude/settings.json` I have this configured and ch
 
   "enabledPlugins": {
     "playwright-skill@playwright-skill": true,
-    "frontend-design@my-claude-plugins": true,
+
+    "frontend-design@my-claude-plugins": false,
     "shadcn-ui@my-claude-plugins": true,
     "tailwindcss@my-claude-plugins": false,
     "skill-creator@my-claude-plugins": true
@@ -131,4 +132,4 @@ In my Next.js project file `.claude/settings.json` I have this configured and ch
 }
 ```
 
-This configures two marketplaces: [playwright-skill](https://github.com/lackeyjb/playwright-skill) (1 plugin enabled) and [my-claude-plugins](https://github.com/michellepace/my-claude-plugins) (3 plugins enabled, 1 disabled).
+This configures two marketplaces: [playwright-skill](https://github.com/lackeyjb/playwright-skill) (1 plugin enabled) and [my-claude-plugins](https://github.com/michellepace/my-claude-plugins) (2 plugins enabled, 2 disabled).
