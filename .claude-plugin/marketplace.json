@@ -1,0 +1,23 @@
+{
+  "name": "my-claude-plugins",
+  "owner": {
+    "name": "Michelle Pace"
+  },
+  "plugins": [
+    {
+      "name": "tailwindcss",
+      "source": "./plugins/tailwindcss",
+      "description": "Guide for implementing Tailwind CSS - a utility-first CSS framework for rapid UI development."
+    },
+    {
+      "name": "shadcn-ui",
+      "source": "./plugins/shadcn-ui",
+      "description": "Guide for implementing shadcn/ui - accessible UI components built with Radix UI and Tailwind CSS."
+    },
+    {
+      "name": "frontend-design",
+      "source": "./plugins/frontend-design",
+      "description": "Create distinctive, production-grade frontend interfaces with high design quality."
+    }
+  ]
+}
