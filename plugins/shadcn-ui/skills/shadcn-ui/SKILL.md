@@ -45,7 +45,7 @@ Commands for an already-initialised project.
 ```bash
 npx shadcn@latest --help                  # CLI help
 npx shadcn@latest list @shadcn            # List all available components
-npx shadcn@latest search @shadcn -q "nav" # Search components by query (-q filters results)
+npx shadcn@latest search @shadcn -q "nav" # Search components by query
 npx shadcn@latest view button card        # Preview code before installing
 npx shadcn@latest add <component>         # Add component to project
 npx shadcn@latest add button --overwrite  # Overwrite existing component
@@ -55,9 +55,78 @@ npx shadcn@latest diff                    # Check for upstream registry updates
 
 ## Best Practices
 
-1. **Compose Primitives**: Build complex UIs by composing simple components
-2. **Use Form Validation**: Use `<Field />` component + TanStack Form + Zod
-3. **Tailwind**: Utility-first, mobile-first (use responsive utilities like `sm:`, `md:`)
+### Styling
+
+Apply Tailwind mobile-first and utility-first design.
+
+- Utility classes for layout (margin, padding, flex, grid, etc)
+- **Variants** for visual styling (colours, borders, shadows)
+- Never hardcode colours — use semantic tokens (`bg-primary`, not `bg-blue-600`)
+
+**Good:** `<Button variant="secondary" className="w-full gap-2">`
+**Avoid:** `<Button className="bg-blue-600 text-white">`
+
+### Extending with Variants
+
+Add variants directly via CVA with semantic tokens:
+
+```tsx
+const buttonVariants = cva("inline-flex items-center justify-center ...", {
+  variants: {
+    variant: {
+      default: "bg-primary text-primary-foreground hover:bg-primary/90",
+      soft: "bg-card text-card-foreground hover:opacity-90", // Custom
+    },
+  },
+});
+```
+
+**Key:** Variants belong in component files via CVA, not as className logic at call sites.
+
+### Composition Pattern
+
+Use compound components (Radix style). Compose primitives, don't wrap them:
+
+```tsx
+<DropdownMenu>
+  <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem>Profile</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+
+### Pure UI Components
+
+UI components handle rendering only. Keep API calls and business logic in hooks or server actions.
+
+### Server Components
+
+Interactive shadcn/ui components include `"use client"` automatically. Push client boundaries down — wrap only the interactive parts.
+
+**Interleave server content inside client wrappers:**
+
+```tsx
+// page.tsx (Server Component)
+export default async function Page() {
+  const user = await getUser();
+  return (
+    <Sheet>
+      <SheetContent>
+        <UserProfile user={user} /> {/* Server-rendered */}
+      </SheetContent>
+    </Sheet>
+  );
+}
+```
+
+Children passed to client components can still be server-rendered.
+
+**Config:** `"rsc": true` in `components.json` (default).
+
+### Forms
+
+Use `<Field />` component + TanStack Form + Zod for validation
 
 ## Component Architecture
 
