@@ -9,7 +9,8 @@ shadcn/ui is a collection of beautifully-designed, accessible components and a c
 
 ## Reference
 
-Components index: <https://ui.shadcn.com/llms.txt>
+- Latest Components index: <https://ui.shadcn.com/llms.txt>
+- Latest Change log: <https://ui.shadcn.com/docs/changelog>
 
 ## Important Changes
 
@@ -29,26 +30,28 @@ Components index: <https://ui.shadcn.com/llms.txt>
 Framework-agnostic primitives (work with Radix, Base UI, React Aria):
 
 | Component | Purpose |
-|:----------|:--------|
+| :-------- | :------ |
 | `<Spinner />` | Loading state indicator |
-| `<Kbd />` / `<KbdGroup />` | Keyboard key display |
+| `<Kbd />` | Keyboard key display (with KbdGroup for combinations) |
 | `<ButtonGroup />` | Related buttons, split button support |
 | `<InputGroup />` | Icons, buttons, labels around inputs |
 | `<Item />` | Flex container for lists/cards (with ItemMedia, ItemContent, ItemTitle) |
 | `<Empty />` | Empty state component (with EmptyMedia, EmptyTitle, EmptyDescription) |
 
-## CLI Commands (v3.0+)
+## CLI Commands
 
-Commands for an already-initialised project. Use `-y` to skip prompts.
+Commands for an already-initialised project.
 
-| Command | Description |
-|:--------|:------------|
-| `npx shadcn@latest list @shadcn` | List all available components |
-| `npx shadcn@latest search @shadcn -q "form"` | Search components by keyword |
-| `npx shadcn@latest view button card` | Preview components before installing |
-| `npx shadcn@latest add button -y` | Add a single component (skip prompts) |
-| `npx shadcn@latest add button -o -y` | Overwrite existing component with latest |
-| `npx shadcn@latest add -a -o -y` | Update all components to latest |
+```bash
+npx shadcn@latest --help                  # CLI help
+npx shadcn@latest list @shadcn            # List all available components
+npx shadcn@latest search @shadcn -q "nav" # Search components by query (-q filters results)
+npx shadcn@latest view button card        # Preview code before installing
+npx shadcn@latest add <component>         # Add component to project
+npx shadcn@latest add button --overwrite  # Overwrite existing component
+npx shadcn@latest add @v0/<block>         # Add from v0.dev registry
+npx shadcn@latest diff                    # Check for upstream registry updates
+```
 
 ## Best Practices
 
