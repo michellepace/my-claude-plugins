@@ -148,6 +148,17 @@ components/
     login-form.tsx             Uses Button, Input, Card with app logic
 ```
 
+### Organisation Philosophy
+
+Pragmatic atomic design — focus on composability without strict categorisation:
+
+- `ui/` — shadcn primitives (atoms/molecules, rarely touched)
+- `{feature}/` — feature-specific compositions
+- `shared/` — cross-feature compositions (only when genuinely reused)
+- Root — occasional one-off files that don't fit elsewhere
+
+**Avoid premature abstraction.** Don't create `components/molecules/` or `components/organisms/` folders. If a composition is only used in one feature, keep it there. Move to `shared/` only when a second feature needs it.
+
 ### Primitives (`components/ui/`)
 
 Installed by shadcn CLI. **Modify directly** for general-purpose improvements.
