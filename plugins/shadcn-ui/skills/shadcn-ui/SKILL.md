@@ -10,8 +10,10 @@ shadcn/ui is a collection of beautifully-designed, accessible components and a c
 
 ## Reference
 
-- Latest Components index: <https://ui.shadcn.com/llms.txt>
-- Latest Change log: <https://ui.shadcn.com/docs/changelog>
+- Local shadcn documentation, search index `~/projects/python/docs-for-ai/shadcn/INDEX.xml`
+- Latest Components index: `~/projects/python/docs-for-ai/shadcn/llms-txt.md`
+- Changelog summary (year 2025): [changelog_summary.md](changelog_summary.md)
+- Full Changelog (year 2025): `~/projects/python/docs-for-ai/shadcn/changelog.md`
 
 ## Important Changes
 
