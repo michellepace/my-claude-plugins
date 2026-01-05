@@ -24,11 +24,10 @@ Plugins and skills curated from other sources, repackaged into `my-claude-plugin
 
 | My Plugin | Source Repo | Source Asset | 🔥 TO DO (write better) |
 | --- | --- | --- | --- |
-| [playwright-skill](https://github.com/lackeyjb/playwright-skill) | [lackeyjb/playwright-skill](https://github.com/lackeyjb/playwright-skill) | [SKILL.md](https://github.com/lackeyjb/playwright-skill/blob/main/skills/playwright/SKILL.md) | Remove: MCP tools more direct; stated API patterns aren't for automated testing. |
-| [frontend-design](./plugins/frontend-design) | [anthropics/skills](https://github.com/anthropics/skills) | [SKILL.md](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md) | Remove: Will break theming, brand new projects only. |
 | [shadcn-ui](./plugins/shadcn-ui) | [michellepace/my-claude-plugins](https://github.com/michellepace/my-claude-plugins) | [SKILL.md](./plugins/shadcn-ui/skills/shadcn-ui/SKILL.md) | ✅ Complete |
+| [skill-creator](./plugins/skill-creator) | [anthropics/skills](https://github.com/anthropics/skills) | [SKILL.md](https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md) | ✅ Official |
 | [tailwindcss](./plugins/tailwindcss) | [einverne/dotfiles](https://github.com/einverne/dotfiles) | [SKILL.md](https://github.com/einverne/dotfiles/blob/master/claude/skills/tailwindcss/SKILL.md) | Remove: basic knowledge and uses TW v3 |
-| [skill-creator](./plugins/skill-creator) | [anthropics/skills](https://github.com/anthropics/skills) | [SKILL.md](https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md) | Keep: official Anthropic skill for creating new skills |
+| [frontend-design](./plugins/frontend-design) | [anthropics/skills](https://github.com/anthropics/skills) | [SKILL.md](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md) | Remove: Will break theming, brand new projects only. |
 
 ## About Plugins and Marketplaces
 
