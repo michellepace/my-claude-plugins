@@ -15,19 +15,18 @@ Then run the command `/plugin` to enable, disable, update, or uninstall a specif
 Enabled plugins will become available to ALL projects. They sometimes trigger automatically depending on your instruction, but I prefer to be explicit:
 
 ```text
-Use the tailwindcss skill to style this component with dark mode support and responsive breakpoints.
+Use the shadcn-ui skill to build this form with proper validation and accessible components.
 ```
 
 ## Plugins Included
 
-Plugins and skills curated from other sources, repackaged into `my-claude-plugins` marketplace for modular control.
+Self-authored plugins and skills repackaged from other sources, collected here for modular control.
 
-| My Plugin | Source Repo | Source Asset | 🔥 TO DO (write better) |
-| --- | --- | --- | --- |
-| [shadcn-ui](./plugins/shadcn-ui) | [michellepace/my-claude-plugins](https://github.com/michellepace/my-claude-plugins) | [SKILL.md](./plugins/shadcn-ui/skills/shadcn-ui/SKILL.md) | ✅ Complete |
-| [skill-creator](./plugins/skill-creator) | [anthropics/skills](https://github.com/anthropics/skills) | [SKILL.md](https://github.com/anthropics/skills/blob/main/skills/skill-creator/SKILL.md) | ✅ Official |
-| [tailwindcss](./plugins/tailwindcss) | [einverne/dotfiles](https://github.com/einverne/dotfiles) | [SKILL.md](https://github.com/einverne/dotfiles/blob/master/claude/skills/tailwindcss/SKILL.md) | Remove: basic knowledge and uses TW v3 |
-| [frontend-design](./plugins/frontend-design) | [anthropics/skills](https://github.com/anthropics/skills) | [SKILL.md](https://github.com/anthropics/skills/blob/main/skills/frontend-design/SKILL.md) | Remove: Will break theming, brand new projects only. |
+| Plugin | Origin | Status |
+| --- | --- | --- |
+| [shadcn-ui](./plugins/shadcn-ui) | This repo | ✅ Self-authored |
+| [skill-creator](./plugins/skill-creator) | [anthropics/skills](https://github.com/anthropics/skills) | ✅ Duplicated (don't want other skills) |
+| [tailwindcss](./plugins/tailwindcss) | [einverne/dotfiles](https://github.com/einverne/dotfiles) | Remove (uses TW v3) |
 
 ## About Plugins and Marketplaces
 
@@ -56,21 +55,27 @@ A plugin can contain any number of the following components:
 └── .mcp.json # external tools to use
 ```
 
-**WHY COLLECT OTHER PEOPLE'S SKILLS / PLUGINS IN MY OWN MARKETPLACE?**
+**WHY REPACKAGE SKILLS INTO MY OWN MARKETPLACE?**
 
-You can't switch skills on and off, only plugins. I find selected skills that I want in marketplaces that are otherwise bloated with skills I will never need. I like to have only those skills I want, and so I package them into my own marketplace. Also, it means I can build on these plugins and have my own source control around it. The downside is that when the author publishes an update, I have to update the plugins manually in this marketplace.
+You can enable or disable *plugins*, but not individual skills within them. If a plugin bundles 5 skills and I only want 1, I'm stuck with all 5 or none.
 
-Sometimes the plugin will contain exactly what I want, like this [Playwright skill](https://github.com/lackeyjb/playwright-skill). In this case, I just install it as another marketplace.
+My solution: extract the skills I want and repackage them as separate, single-skill plugins in my own marketplace. This gives me:
+
+- Granular control over exactly which skills are active
+- My own source control and ability to customize
+- (Downside: I manually update when authors publish changes)
+
+Sometimes a plugin is exactly what I need as-is—like those in [claude-plugins-official](https://github.com/anthropics/claude-plugins-official). Each skill is its own plugin, so I can enable/disable exactly what I want. No repackaging needed.
 
 ## Configuring Plugins at Project Level
 
-I like my configuration to be in source control.
+I keep my configuration in source control.
 
-Manually adding "extraKnownMarketplaces" will mean when anyone opens Claude Code in this project, the marketplaces will automatically be available.
+**Step 1: Register marketplaces** — Adding `extraKnownMarketplaces` makes the marketplace *available* to anyone who opens Claude Code in this project. Think of it as adding an app store.
 
-Running `/plugin` and opting to install marketplaces at project level will modify your project `.claude/settings.json` as "EnabledPlugins".  If you want to disable plugins, you can set them to false directly or disable via `/plugin` that will remove the line.
+**Step 2: Enable plugins** — The `enabledPlugins` section controls which plugins from those marketplaces are actually *active*. You can set them to `false` to disable, or use `/plugin` to manage them interactively.
 
-In my Next.js project file `.claude/settings.json` I have this configured and checked into source control:
+In my Next.js project `.claude/settings.json`:
 
 ```json
 {
@@ -92,12 +97,11 @@ In my Next.js project file `.claude/settings.json` I have this configured and ch
   "enabledPlugins": {
     "playwright-skill@playwright-skill": true,
 
-    "frontend-design@my-claude-plugins": false,
     "shadcn-ui@my-claude-plugins": true,
-    "tailwindcss@my-claude-plugins": false,
-    "skill-creator@my-claude-plugins": true
+    "skill-creator@my-claude-plugins": true,
+    "tailwindcss@my-claude-plugins": false
   }
 }
 ```
 
-This configures two marketplaces: [playwright-skill](https://github.com/lackeyjb/playwright-skill) (1 plugin enabled) and [my-claude-plugins](https://github.com/michellepace/my-claude-plugins) (2 plugins enabled, 2 disabled).
+This configures two marketplaces: [playwright-skill](https://github.com/lackeyjb/playwright-skill) (1 plugin enabled) and [my-claude-plugins](https://github.com/michellepace/my-claude-plugins) (2 enabled, 1 disabled).
