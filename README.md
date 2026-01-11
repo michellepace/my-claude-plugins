@@ -24,7 +24,8 @@ Self-authored plugins and skills repackaged from other sources, collected here f
 
 | Plugin | Origin | Status |
 | --- | --- | --- |
-| [shadcn-ui](./plugins/shadcn-ui) | This repo | ✅ Self-authored |
+| [shadcn-ui](./plugins/shadcn-ui) | This repo | ✅ Self-authored (Shadcn best practices) |
+| [cc-whats-new](./plugins/cc-whats-new) | This repo | ✅ Self-authored (Claude Code whats new) |
 | [skill-creator](./plugins/skill-creator) | [anthropics/skills](https://github.com/anthropics/skills) | ✅ Duplicated (don't want other skills) |
 | [tailwindcss](./plugins/tailwindcss) | [einverne/dotfiles](https://github.com/einverne/dotfiles) | Remove (uses TW v3) |
 
@@ -37,8 +38,8 @@ A marketplace is a collection of plugins. Each plugin is a "bag" containing any 
 For this marketplace, the packaged plugins live in [plugins/](plugins/).
 
 <div align="center">
-  <a href="marketplace-plugin-sketch.webp" target="_blank">
-    <img src="marketplace-plugin-sketch.webp" alt="Hand-drawn sketch showing the plugin-marketplace relationship. A large rounded rectangle labelled I will package it into a marketplace contains three smaller rounded shapes representing individual plugins. The leftmost plugin labelled Plugin Bag shows its contents: Skills, Agents, Commands, MCPs, and Hooks. Two additional plugins are labelled another plugin and another one. Below the diagram are five checkmarks listing marketplace benefits with a bracket labelled Marketplace Benefits: Source Control, One place for all projects, plugins can be switched on or off, easy to share, and easy to get updates." width="550">
+  <a href="images/marketplace-plugin-sketch.webp" target="_blank">
+    <img src="images/marketplace-plugin-sketch.webp" alt="Hand-drawn sketch showing the plugin-marketplace relationship. A large rounded rectangle labelled I will package it into a marketplace contains three smaller rounded shapes representing individual plugins. The leftmost plugin labelled Plugin Bag shows its contents: Skills, Agents, Commands, MCPs, and Hooks. Two additional plugins are labelled another plugin and another one. Below the diagram are five checkmarks listing marketplace benefits with a bracket labelled Marketplace Benefits: Source Control, One place for all projects, plugins can be switched on or off, easy to share, and easy to get updates." width="550">
   </a>
 </div>
 
@@ -47,19 +48,21 @@ A plugin can contain any number of the following components:
 ```text
 [plugin-name]/
 ├── .claude-plugin/plugin.json # Manifest (REQUIRED)
-├── commands/ # slash commands .md
-├── agents/ # new context window (.md)
-├── skills/ # extends capabilities (.md)
-├── hooks/ # reacts to events
-├── scripts/ # eg. for hooks to run
+├── commands/ # slash commands (.md)
+├── agents/   # new context window (.md)
+├── skills/   # extends capabilities (.md)
+├── hooks/    # reacts to events (.json)
+├── scripts/  # eg. for hooks to run
 └── .mcp.json # external tools to use
 ```
 
+*Note: hooks and MCP servers can alternatively be defined inline in `plugin.json`.*
+
 **WHY REPACKAGE SKILLS INTO MY OWN MARKETPLACE?**
 
-You can enable or disable *plugins*, but not individual skills within them. If a plugin bundles 5 skills and I only want 1, I'm stuck with all 5 or none.
+You can enable or disable *plugins*, but not individual skills within them. If a plugin bundles 5 skills and I only want 1, I'm stuck with all 5 or none. So I extract the skills I want and repackage them as separate, single-skill plugins in my own marketplace.
 
-My solution: extract the skills I want and repackage them as separate, single-skill plugins in my own marketplace. This gives me:
+This gives me:
 
 - Granular control over exactly which skills are active
 - My own source control and ability to customize
@@ -80,12 +83,6 @@ In my Next.js project `.claude/settings.json`:
 ```json
 {
   "extraKnownMarketplaces": {
-    "playwright-skill": {
-      "source": {
-        "source": "github",
-        "repo": "lackeyjb/playwright-skill"
-      }
-    },
     "my-claude-marketplace": {
       "source": {
         "source": "github",
@@ -95,13 +92,12 @@ In my Next.js project `.claude/settings.json`:
   },
 
   "enabledPlugins": {
-    "playwright-skill@playwright-skill": true,
-
     "shadcn-ui@my-claude-marketplace": true,
     "skill-creator@my-claude-marketplace": true,
-    "tailwindcss@my-claude-marketplace": false
+    "tailwindcss@my-claude-marketplace": false,
+    "cc-whats-new@my-claude-marketplace": true
   }
 }
 ```
 
-This configures two marketplaces: [playwright-skill](https://github.com/lackeyjb/playwright-skill) (1 plugin enabled) and [my-claude-marketplace](https://github.com/michellepace/my-claude-marketplace) (2 enabled, 1 disabled).
+This registers the marketplace and enables 3 plugins (tailwindcss disabled).
