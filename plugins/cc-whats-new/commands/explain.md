@@ -57,7 +57,7 @@ LATEST `[N]` Versions:
 ┌─────────┬───────┬────────────┬────────────────────────────────────────────────────┐
 │ Version │ Items │ Released   │ At A Glance                                        │
 ├─────────┼───────┼────────────┼────────────────────────────────────────────────────┤
-│ x.x.xxx │    nn │ YYYY-MM-DD │ most impactful (40-50 chars)                       │
+│ x.x.xxx │    nn │ YYYY-MM-DD │ most impactful on user experience (40-50 chars)    │
 │ ...     │   ... │ ...        │                                                    │
 └─────────┴───────┴────────────┴────────────────────────────────────────────────────┘
 
@@ -93,7 +93,7 @@ if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
   # Series (e.g., 2.1) - get all matching versions
   SECTION=$(curl -s https://raw.githubusercontent.com/anthropics/claude-code/refs/heads/main/CHANGELOG.md | awk -v ser="$VERSION." '/^## [0-9]/ && index($2, ser) == 1 { p=1 } /^## [0-9]/ && p && index($2, ser) == 0 { exit } p')
 else
-  # Exact version (e.g., 2.1.3) - includes ## header, uses if-else to avoid != shell escaping issues
+  # Exact version (e.g., 2.1.3)
   SECTION=$(curl -s https://raw.githubusercontent.com/anthropics/claude-code/refs/heads/main/CHANGELOG.md | awk -v ver="$VERSION" '/^## [0-9]/ { if ($2 == ver) { p=1 } else if (p) { exit } } p')
 fi
 
@@ -110,15 +110,15 @@ Use the Task tool to spawn `claude-code-guide` agent with the extracted changelo
 
 <agent_prompt>
 
-**GOAL:** Help the user use Claude Code more effectively by explaining what's new in version [VERSION].
+**GOAL:** Help users use Claude Code more effectively by explaining what's new in version [VERSION].
 
 Changelog entries:
 
 [INSERT THE <changelog_extracted version="...">...</changelog_extracted> BLOCK FROM ABOVE]
 
-1. Evaluate which changes highly impact user experience.
+1. Evaluate which changes highly impact Claude Code user experience.
 
-2. Create a **Summary table:** "Feature | Benefit". Rank by Dev UX impact (most impactful first). Width <100 characters. Group fixes separately if many items.
+2. Create a **Summary table:** "Feature | Benefit". Rank by impact on Claude Code users (most impactful first). Width <100 characters. Group fixes separately if many items.
 
 3. Explain **significant features:** using the `<explain_features_template>` below and your Claude Code Guide knowledge for useful examples.
 
