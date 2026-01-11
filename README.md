@@ -10,9 +10,7 @@ Add this marketplace to your Claude Code:
 /plugin marketplace add michellepace/my-claude-marketplace
 ```
 
-Then run the command `/plugin` to enable, disable, update, or uninstall a specific plugin in this marketplace.
-
-Enabled plugins will become available to ALL projects. They sometimes trigger automatically depending on your instruction, but I prefer to be explicit:
+Then run the command `/plugin` to enable, disable, update, or uninstall a specific plugin in this marketplace at your preferred scope (see [Appendix: Plugin Scope](#appendix-plugin-scope)).
 
 ```text
 Use the shadcn-ui skill to build this form with proper validation and accessible components.
@@ -23,7 +21,7 @@ Use the shadcn-ui skill to build this form with proper validation and accessible
 Self-authored plugins and skills repackaged from other sources, collected here for modular control.
 
 | Plugin | Origin | Status |
-| --- | --- | --- |
+| :----- | :----- | :----- |
 | [shadcn-ui](./plugins/shadcn-ui) | This repo | ✅ Self-authored (Shadcn best practices) |
 | [cc-whats-new](./plugins/cc-whats-new) | This repo | ✅ Self-authored (Claude Code whats new) |
 | [skill-creator](./plugins/skill-creator) | [anthropics/skills](https://github.com/anthropics/skills) | ✅ Duplicated (don't want other skills) |
@@ -101,3 +99,14 @@ In my Next.js project `.claude/settings.json`:
 ```
 
 This registers the marketplace and enables 3 plugins (tailwindcss disabled).
+
+## Appendix: Plugin Scope
+
+Plugins can be enabled at four scope levels. Higher scopes override lower ones (managed > local > project > user).
+
+| Scope | Settings File | Who it affects | Shared with team? |
+| :---- | :------------ | :------------- | :---------------- |
+| **user** | `~/.claude/settings.json` | You, across all projects | No |
+| **project** | `.claude/settings.json` | All collaborators on the repo | Yes (committed to git) |
+| **local** | `.claude/settings.local.json` | You, in this repo only | No (gitignored) |
+| **managed** | `managed-settings.json` (system) | All users on the machine | Yes (deployed by IT) |
