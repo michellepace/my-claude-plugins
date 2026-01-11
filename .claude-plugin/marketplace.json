@@ -3,6 +3,9 @@
   "owner": {
     "name": "Michelle Pace"
   },
+  "metadata": {
+    "description": "Personal Claude Code marketplace with self-authored and curated plugins"
+  },
   "plugins": [
     {
       "name": "shadcn-ui",
