@@ -5,6 +5,7 @@ allowed-tools: Task, Read, Bash(claude:*), Bash(curl:*), Bash(awk:*), Bash(echo:
 ---
 
 **Version provided:** $ARGUMENTS
+
 **Claude Code User Version:** !`claude --version`
 
 ## Step 1: Show Latest Versions
