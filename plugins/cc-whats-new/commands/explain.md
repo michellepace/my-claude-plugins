@@ -13,8 +13,12 @@ allowed-tools: Task, Read, Bash(claude:*), Bash(curl:*), Bash(awk:*), Bash(echo:
 Run these commands for changelog data:
 
 ```bash
-# Cache data sources
-CHANGELOG=$(curl -s https://raw.githubusercontent.com/anthropics/claude-code/refs/heads/main/CHANGELOG.md | awk '/^## [01]\./{exit} {print}'); # v2.0.0+ only
+# Write changelog to temp file (source of truth for all code blocks, v2.0.0+ only)
+CHANGELOG_FILE="/tmp/cc-whats-new-changelog.md"
+curl -s https://raw.githubusercontent.com/anthropics/claude-code/refs/heads/main/CHANGELOG.md | awk '/^## [01]\./{exit} {print}' > "$CHANGELOG_FILE"
+CHANGELOG=$(cat "$CHANGELOG_FILE")
+echo "✅ Changelog file created (v2.0.0+ only): $CHANGELOG_FILE"
+
 NPM_RELEASE_DATES=$(npm view @anthropic-ai/claude-code time);
 
 # Extract versions from changelog (source of truth for this command)
@@ -90,13 +94,14 @@ Extract the changelog section for the determined version:
 
 ```bash
 VERSION="[VERSION]"  # e.g., "2.1.3" or "2.1"
+CHANGELOG_FILE="/tmp/cc-whats-new-changelog.md"
 
 if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+$ ]]; then
   # Series (e.g., 2.1) - get all matching versions
-  SECTION=$(curl -s https://raw.githubusercontent.com/anthropics/claude-code/refs/heads/main/CHANGELOG.md | awk -v ser="$VERSION." '/^## [0-9]/ && index($2, ser) == 1 { p=1 } /^## [0-9]/ && p && index($2, ser) == 0 { exit } p')
+  SECTION=$(awk -v ser="$VERSION." '/^## [0-9]/ && index($2, ser) == 1 { p=1 } /^## [0-9]/ && p && index($2, ser) == 0 { exit } p' "$CHANGELOG_FILE")
 else
   # Exact version (e.g., 2.1.3)
-  SECTION=$(curl -s https://raw.githubusercontent.com/anthropics/claude-code/refs/heads/main/CHANGELOG.md | awk -v ver="$VERSION" '/^## [0-9]/ { if ($2 == ver) { p=1 } else if (p) { exit } } p')
+  SECTION=$(awk -v ver="$VERSION" '/^## [0-9]/ { if ($2 == ver) { p=1 } else if (p) { exit } } p' "$CHANGELOG_FILE")
 fi
 
 echo "<changelog_extracted version=\"$VERSION\">"
