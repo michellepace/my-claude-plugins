@@ -19,41 +19,33 @@ curl -s https://raw.githubusercontent.com/anthropics/claude-code/refs/heads/main
 CHANGELOG=$(cat "$CHANGELOG_FILE")
 echo "✅ Changelog file created (v2.0.0+): $CHANGELOG_FILE"
 
-# Write release dates to temp file (v2.0.0+ only)
-RELEASE_DATES_FILE="/tmp/cc-whats-new-releases.txt"
-npm view @anthropic-ai/claude-code time | grep -E "^ +'[2-9]\." | tac | sed "s/T.*Z'//" | tr -d "':," | column -t > "$RELEASE_DATES_FILE"
-echo "✅ Release dates file created (v2.0.0+, may include hotfixes not in changelog): $RELEASE_DATES_FILE"
+# Write releases CSV with changelog item counts (v2.0.0+ only)
+RELEASES_FILE="/tmp/cc-whats-new-releases.csv"
+CHANGELOG_COUNTS=$(echo "$CHANGELOG" | awk '/^## /{if(v)print v","c;v=$2;c=0}/^- /{c++}END{print v","c}')
+echo "version,npm_release_date,changelog_items (0=npm-only)" > "$RELEASES_FILE"
+npm view @anthropic-ai/claude-code time | grep -E "^ +'[2-9]\." | tac | sed "s/T.*Z'//" | tr -d "':," | column -t | while read -r ver date; do
+  items=$(echo "$CHANGELOG_COUNTS" | grep "^$ver," | cut -d',' -f2)
+  echo "$ver,$date,${items:-0}"
+done >> "$RELEASES_FILE"
+echo "✅ Releases file created (v2.0.0+): $RELEASES_FILE"
 
-# Extract versions from changelog (source of truth for this command)
-VERSIONS=$(echo "$CHANGELOG" | awk '/^## [0-9]/{count++; if(count<=4) print $2}');
-PATTERN=$(echo "$VERSIONS" | paste -sd '|');
-
-# When were these versions released?
+# Latest releases (0 changelog items = npm-only)
 echo "<changelog_data>";
-echo "=== Release Dates ===";
-echo "<release_dates>";
-grep -E "^($PATTERN) " "$RELEASE_DATES_FILE"
-echo "</release_dates>";
+echo "=== Latest Releases ===";
+echo "<latest_release_with_changelog_items>";
+head -7 "$RELEASES_FILE"
+echo "</latest_release_with_changelog_items>";
 
 # What changed?
 echo "";
 echo "=== Latest Changelog ===";
 echo "<latest_changelog>";
-echo "$CHANGELOG" | awk '/^## [0-9]/{count++} count<=4';
+echo "$CHANGELOG" | awk '/^## [0-9]/{count++} count<=6';
 echo "</latest_changelog>";
-
-# All versions with item counts
-echo "";
-echo "=== All Versions ===";
-echo "<all_versions_with_item_count>";
-echo "version|count";
-echo "$CHANGELOG" | awk '/^## /{if(v)print v"|"c;v=$2;c=0}/^- /{c++}END{print v"|"c}';
-echo "total_versions: $(echo "$CHANGELOG" | awk '/^## [0-9]/{n++}END{print n}') versions";
-echo "</all_versions_with_item_count>";
 echo "</changelog_data>";
 ```
 
-Analyse data in `<changelog_data>` tags and display welcome message using this template (apply backticks):
+Analyse data in `<changelog_data>` tags and display welcome message using this template (use backticks and "ℹ️"):
 
 <welcome_message_template>
 
@@ -68,19 +60,24 @@ Latest `[N]` changelog entries:
 ┌─────────┬───────┬────────────┬────────────────────────────────────────────────────┐
 │ Version │ Items │ Released   │ At A Glance                                        │
 ├─────────┼───────┼────────────┼────────────────────────────────────────────────────┤
-│ x.x.xxx │    nn │ YYYY-MM-DD │ most impactful on user experience (40-50 chars)    │
+│ x.x.xxx │    nn │ YYYY-MM-DD │ Most impactful on user experience (40-60 chars)    │
+│ x.x.xxx │     0 │ YYYY-MM-DD │ (No changelog entry)                               │
 │ ...     │   ... │ ...        │                                                    │
 └─────────┴───────┴────────────┴────────────────────────────────────────────────────┘
+
+*ℹ️ Why Zero Changelog Items? [if a version has zero items provide a simple likely explanation...]*
 
 </welcome_message_template>
 
 ## Step 2: Determine Provided Version
 
-Check if `$ARGUMENTS` is provided and contains a version in the changelog.
+Check if `$ARGUMENTS` contains a version in `/tmp/cc-whats-new-releases.csv`.
 
-**Valid version?** → Proceed to Step 3
+**Valid version with changelog_items > 0?** → Proceed to Step 3
 
-**No version or invalid?** → Try to infer a valid version the user might mean: "🤔 Which version? Did you perhaps mean `[version]` or ...?"
+**Valid version with changelog_items = 0?** → "🤔 Version `X.X.X` has no changelog entries, so I won't be able to explain what changed. It's likely because [...]. What about `[nearest versions with items]`?"
+
+**Invalid or missing version?** → "🤔 Which version? Did you perhaps mean `[suggest version]` or ...?"
 
 ## Step 3: Acknowledge & Proceed
 
