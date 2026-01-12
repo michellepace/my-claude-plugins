@@ -13,9 +13,8 @@ allowed-tools: Task, Read, Bash(claude:*), Bash(curl:*), Bash(awk:*), Bash(echo:
 Run these commands for changelog data:
 
 ```bash
-# Cache both data sources once
-CHANGELOG=$(curl -s https://raw.githubusercontent.com/anthropics/claude-code/refs/heads/main/CHANGELOG.md);
-CHANGELOG=$(echo "$CHANGELOG" | awk '/^## [01]\./{exit} {print}');  # Exclude pre-2.0.0 versions (wonky data)
+# Cache data sources
+CHANGELOG=$(curl -s https://raw.githubusercontent.com/anthropics/claude-code/refs/heads/main/CHANGELOG.md | awk '/^## [01]\./{exit} {print}'); # v2.0.0+ only
 NPM_RELEASE_DATES=$(npm view @anthropic-ai/claude-code time);
 
 # Extract versions from changelog (source of truth for this command)
