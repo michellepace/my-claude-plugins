@@ -4,9 +4,9 @@ argument-hint: [version]
 allowed-tools: Task, Read, Bash(claude:*), Bash(curl:*), Bash(awk:*), Bash(echo:*), Bash(npm view:*), Bash(grep:*), Bash(tail:*), Bash(tac:*), Bash(sed:*), Bash(tr:*), Bash(paste:*), Bash(column:*)
 ---
 
-**Version provided:** $ARGUMENTS
+**version_provided**: $ARGUMENTS
 
-**Claude Code User Version:** !`claude --version`
+**user_version**: !`claude --version`
 
 ## Step 1: Show Latest Versions
 
@@ -42,18 +42,22 @@ echo "=== All Versions ===";
 echo "<all_versions_with_item_count>";
 echo "version|count";
 echo "$CHANGELOG" | awk '/^## /{if(v)print v"|"c;v=$2;c=0}/^- /{c++}END{print v"|"c}';
-echo "total: $(echo "$CHANGELOG" | awk '/^## [0-9]/{n++}END{print n}') versions";
+echo "total_versions: $(echo "$CHANGELOG" | awk '/^## [0-9]/{n++}END{print n}') versions";
 echo "</all_versions_with_item_count>";
 echo "</changelog_data>";
 ```
 
-Analyse changelog data and present in this format (apply backticks):
+Analyse data in `<changelog_data>` tags and display welcome message using this template (apply backticks):
 
-<format_changelog_summary>
+<welcome_message_template>
 
-Changelog covers [total_versions] versions (`[latest]` → `[earliest]`)
+# WELCOME TO THE CLAUDE CODE CHANGELOG
 
-LATEST `[N]` Versions:
+There Claude Code changelog on GitHub details `[total_versions]` versions ranging from version (`[latest]` → `[earliest]`).
+
+You are running Claude Code version `[user_version]`.
+
+Latest `[N]` changelog entries:
 
 ┌─────────┬───────┬────────────┬────────────────────────────────────────────────────┐
 │ Version │ Items │ Released   │ At A Glance                                        │
@@ -62,7 +66,7 @@ LATEST `[N]` Versions:
 │ ...     │   ... │ ...        │                                                    │
 └─────────┴───────┴────────────┴────────────────────────────────────────────────────┘
 
-</format_changelog_summary>
+</welcome_message_template>
 
 ## Step 2: Determine Provided Version
 
@@ -70,9 +74,7 @@ Check if `$ARGUMENTS` is provided and contains a version in the changelog.
 
 **Valid version?** → Proceed to Step 3
 
-**No version or invalid?** → Try to infer a valid version the user might mean:
-
-> 🤔 Which version? Did you perhaps mean `[version]` or ...?
+**No version or invalid?** → Try to infer a valid version the user might mean: "🤔 Which version? Did you perhaps mean `[version]` or ...?"
 
 ## Step 3: Acknowledge & Proceed
 
