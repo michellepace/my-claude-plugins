@@ -1,7 +1,7 @@
 ---
 description: What's new in Claude Code (eg 2.1.2 or 2.1 for all 2.1.*)
 argument-hint: [version]
-allowed-tools: Task, Read, Bash(claude:*), Bash(curl:*), Bash(awk:*), Bash(echo:*), Bash(npm view:*), Bash(grep:*), Bash(tail:*), Bash(tac:*), Bash(sed:*), Bash(tr:*), Bash(paste:*), Bash(column:*)
+allowed-tools: Task, Read, Bash(claude:*), Bash(curl:*), Bash(awk:*), Bash(echo:*), Bash(npm view:*), Bash(grep:*), Bash(head:*), Bash(tail:*), Bash(tac:*), Bash(sed:*), Bash(tr:*), Bash(cat:*), Bash(paste:*), Bash(column:*)
 ---
 
 **version_provided**: $ARGUMENTS
@@ -13,13 +13,16 @@ allowed-tools: Task, Read, Bash(claude:*), Bash(curl:*), Bash(awk:*), Bash(echo:
 Run these commands for changelog data:
 
 ```bash
-# Write changelog to temp file (source of truth for all code blocks, v2.0.0+ only)
+# Write changelog to temp file (v2.0.0+ only)
 CHANGELOG_FILE="/tmp/cc-whats-new-changelog.md"
 curl -s https://raw.githubusercontent.com/anthropics/claude-code/refs/heads/main/CHANGELOG.md | awk '/^## [01]\./{exit} {print}' > "$CHANGELOG_FILE"
 CHANGELOG=$(cat "$CHANGELOG_FILE")
-echo "✅ Changelog file created (v2.0.0+ only): $CHANGELOG_FILE"
+echo "✅ Changelog file created (v2.0.0+): $CHANGELOG_FILE"
 
-NPM_RELEASE_DATES=$(npm view @anthropic-ai/claude-code time);
+# Write release dates to temp file (v2.0.0+ only)
+RELEASE_DATES_FILE="/tmp/cc-whats-new-releases.txt"
+npm view @anthropic-ai/claude-code time | grep -E "^ +'[2-9]\." | tac | sed "s/T.*Z'//" | tr -d "':," | column -t > "$RELEASE_DATES_FILE"
+echo "✅ Release dates file created (v2.0.0+, may include hotfixes not in changelog): $RELEASE_DATES_FILE"
 
 # Extract versions from changelog (source of truth for this command)
 VERSIONS=$(echo "$CHANGELOG" | awk '/^## [0-9]/{count++; if(count<=4) print $2}');
@@ -29,7 +32,7 @@ PATTERN=$(echo "$VERSIONS" | paste -sd '|');
 echo "<changelog_data>";
 echo "=== Release Dates ===";
 echo "<release_dates>";
-echo "$NPM_RELEASE_DATES" | grep -E "'($PATTERN)'" | tac | sed "s/T.*Z'//" | tr -d "':," | column -t;
+grep -E "^($PATTERN) " "$RELEASE_DATES_FILE"
 echo "</release_dates>";
 
 # What changed?
