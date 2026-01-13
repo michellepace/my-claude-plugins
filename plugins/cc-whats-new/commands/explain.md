@@ -55,23 +55,21 @@ echo "";
 echo "</latest_version_summary>";
 ```
 
-Analyse data in `<latest_version_summary>` tags and display welcome message using this template (use backticks):
+Analyse data in `<latest_version_summary>` tags to populate template (use backticks and emoji "🙂"):
 
 <welcome_message_template>
 
 # KNOW WHAT CHANGED IN CLAUDE CODE
 
-Claude Code has `[total_versions]` versions within (`[latest]` → `[earliest]`). Most have a **changelog entry** — one or more **items** describing what changed. Your Claude Code version is `[user_version]`.
+Claude Code has `[total_versions]` versions within (`[latest]` → `[earliest]`). Most have a **changelog entry** — one or more **items** describing what changed.
 
-🎁 Latest `[N]` Versions:
+🙂 Latest `[N]` Versions:
 
-┌─────────┬────────────┬───────┬────────────────────────────────────────────────────┐
-│ Version │ Released   │ Items │ Changes At A Glance                                │
-├─────────┼────────────┼───────┼────────────────────────────────────────────────────┤
-│ x.x.xxx │ YYYY-MM-DD │    nn │ Most impactful on user experience (40-60 chars)    │
-│ x.x.xxx │ YYYY-MM-DD │     0 │ (no changelog entry)                               │
-│ ...     │ ...        │   ... │                                                    │
-└─────────┴────────────┴───────┴────────────────────────────────────────────────────┘
+| Version | Released | Items | Changes At A Glance |
+| ------- | -------- | ----- | ------------------- |
+| `x.x.x` | YYYY-MM-DD | nn | Most impactful change (40-50 chars) |
+| `x.x.x` | YYYY-MM-DD | 0 | (no changelog entry) |
+| ... | ... | ... | ... |
 
 *[Short note why version may have zero items (if applicable)]*
 
@@ -114,30 +112,39 @@ else
 fi
 
 echo "$SECTION" > "$VERSION_CHANGELOG_FILE"
-echo "✅ Version changelog ready: $VERSION_CHANGELOG_FILE"
+echo "✅ Version changelog created: $VERSION_CHANGELOG_FILE"
 ```
 
 Proceed to Step 5 where this changelog will be provided to the agent.
 
 ## Step 5: Explain Changes Practically
 
-Use the Task tool to spawn `claude-code-guide` agent. Read the version changelog file and include its contents in the prompt:
+Use the Task tool to spawn `claude-code-guide` agent in **foreground mode** (`run_in_background: false`) with the following prompt:
 
 <agent_prompt>
 
-**GOAL:** Help users use Claude Code more effectively by explaining what's new in version `[VERSION]`.
+**GOAL:** Help users leverage new Claude Code features in version `[VERSION]` — what they mean, why they matter, and how to use them.
 
-Changelog entries:
+Steps:
 
-<changelog_entries>
-{{READ AND INSERT CONTENTS OF `/tmp/cc-whats-new-version-changelog.md` HERE}}
-</changelog_entries>
+1. Read and analyse changelog: `/tmp/cc-whats-new-version-changelog.md`
 
-1. Evaluate which changes highly impact Claude Code user experience.
+2. Evaluate which changes most impact Claude Code users.
 
-2. Create a **Summary table:** "Feature | Benefit". Rank by impact on Claude Code users (most impactful first). Width <100 characters. Group fixes separately if many items.
+3. Create a **Summary table:** "Feature | Benefit". Rank by impact (most impactful first). Width <100 chars.
 
-3. Explain **significant features:** using the `<explain_features_template>` below and your Claude Code Guide knowledge for useful examples.
+4. List **Fixes:** separately e.g.,
+
+    ```
+    **Fixes:**
+    - [Problem ➜ Resolution]
+    - [eg Plan files after /clear ➜ Fresh plan file now used]
+    - [eg Web search model in sub-agents ➜ Uses correct model]
+    ```
+
+5. For each significant feature in the table, use WebFetch to consult official Claude Code documentation for the relevant topic.
+
+6. Explain **significant features** using the template below. Enhance explanations and examples with useful information from the documentation where relevant, and include citations.
 
    <explain_features_template>
 
@@ -149,9 +156,13 @@ Changelog entries:
 
    EXAMPLE: [Practical example helping user see relevance and realise value from this feature.]
 
+   Docs: [Links to official docs if used to enhance content]
+
    ---
 
    </explain_features_template>
+
+7. Verify you have honestly completed steps 1-6
 
 </agent_prompt>
 
