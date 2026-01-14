@@ -24,6 +24,7 @@ Self-authored plugins and skills repackaged from other sources, collected here f
 | :----- | :----- | :----- |
 | [shadcn-ui](./plugins/shadcn-ui) | This repo | ✅ Self-authored (Shadcn best practices) |
 | [cc-whats-new](./plugins/cc-whats-new) | This repo | ✅ Self-authored (Claude Code whats new) |
+| [cc-marketplaces-plugins](./plugins/cc-marketplaces-plugins) | This repo | ✅ Self-authored (Show whats enabled) |
 | [skill-creator](./plugins/skill-creator) | [anthropics/skills](https://github.com/anthropics/skills) | ✅ Duplicated (don't want other skills) |
 | [tailwindcss](./plugins/tailwindcss) | [einverne/dotfiles](https://github.com/einverne/dotfiles) | Remove (uses TW v3) |
 
@@ -56,27 +57,12 @@ A plugin can contain any number of the following components:
 
 *Note: hooks and MCP servers can alternatively be defined inline in `plugin.json`.*
 
-**WHY REPACKAGE SKILLS INTO MY OWN MARKETPLACE?**
-
-You can enable or disable *plugins*, but not individual skills within them. If a plugin bundles 5 skills and I only want 1, I'm stuck with all 5 or none. So I extract the skills I want and repackage them as separate, single-skill plugins in my own marketplace.
-
-This gives me:
-
-- Granular control over exactly which skills are active
-- My own source control and ability to customize
-- (Downside: I manually update when authors publish changes)
-
-Sometimes a plugin is exactly what I need as-is—like those in [claude-plugins-official](https://github.com/anthropics/claude-plugins-official). Each skill is its own plugin, so I can enable/disable exactly what I want. No repackaging needed.
-
 ## Configuring Plugins at Project Level
 
-I keep my configuration in source control.
+To share plugin configuration with your team via source control, add this to `.claude/settings.json`:
 
-**Step 1: Register marketplaces** — Adding `extraKnownMarketplaces` makes the marketplace *available* to anyone who opens Claude Code in this project. Think of it as adding an app store.
-
-**Step 2: Enable plugins** — The `enabledPlugins` section controls which plugins from those marketplaces are actually *active*. You can set them to `false` to disable, or use `/plugin` to manage them interactively.
-
-In my Next.js project `.claude/settings.json`:
+- **extraKnownMarketplaces** — prompts team members to add the marketplace when they open the project
+- **enabledPlugins** — controls which installed plugins are active (`true`) or disabled (`false`)
 
 ```json
 {
@@ -93,12 +79,13 @@ In my Next.js project `.claude/settings.json`:
     "shadcn-ui@my-claude-marketplace": true,
     "skill-creator@my-claude-marketplace": true,
     "tailwindcss@my-claude-marketplace": false,
-    "cc-whats-new@my-claude-marketplace": true
+    "cc-whats-new@my-claude-marketplace": true,
+    "cc-marketplaces-plugins@my-claude-marketplace": true
   }
 }
 ```
 
-This registers the marketplace and enables 3 plugins (tailwindcss disabled).
+This registers the marketplace and enables 4 plugins (tailwindcss disabled).
 
 ## Appendix: Plugin Scope
 

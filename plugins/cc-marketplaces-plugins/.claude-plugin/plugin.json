@@ -1,0 +1,6 @@
+{
+  "name": "cc-marketplaces-plugins",
+  "description": "Show the state of Marketplaces and Plugins across all scopes",
+  "version": "1.0.0",
+  "license": "MIT"
+}

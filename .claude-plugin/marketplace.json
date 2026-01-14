@@ -26,6 +26,11 @@
       "name": "cc-whats-new",
       "source": "./plugins/cc-whats-new",
       "description": "Explain what's new in Claude Code versions with practical examples"
+    },
+    {
+      "name": "cc-marketplaces-plugins",
+      "source": "./plugins/cc-marketplaces-plugins",
+      "description": "Show the state of Marketplaces and Plugins across all scopes"
     }
   ]
 }
