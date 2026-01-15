@@ -107,14 +107,16 @@ This registers the marketplace and enables all 4 plugins.
 
 ## Appendix 1: Plugin Scope
 
-Plugins can be enabled at five scope levels. Higher scopes override lower ones (managed > command line > local > project > user). Command line means session overrides via flags like `--plugin-dir` — see [Appendix 2](#appendix-2-developing-plugins).
+Plugins can be enabled at four scope levels. Higher scopes override lower ones (managed > local > project > user).
 
 | Scope | Settings File | Who it affects | Shared with team? |
 | :---- | :------------ | :------------- | :---------------- |
-| **user** | `~/.claude/settings.json` | You, across all projects | No |
-| **project** | `.claude/settings.json` | All collaborators on the repo | Yes (committed to git) |
-| **local** | `.claude/settings.local.json` | You, in this repo only | No (gitignored) |
 | **managed** | `managed-settings.json` (system) | All users on the machine | Yes (deployed by IT) |
+| **local** | `.claude/settings.local.json` | You, in this repo only | No (gitignored) |
+| **project** | `.claude/settings.json` | All collaborators on the repo | Yes (committed to git) |
+| **user** | `~/.claude/settings.json` | You, across all projects | No |
+
+*Command line flags like `--plugin-dir` provide temporary session overrides that take precedence over all scopes except managed.*
 
 ## Appendix 2: Developing Plugins
 
