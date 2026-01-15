@@ -2,20 +2,6 @@
 
 Personal Claude Code marketplace: plugins and skills curated and packaged for individual install/uninstall control.
 
-## Usage
-
-Add this marketplace to your Claude Code:
-
-```shell
-/plugin marketplace add michellepace/my-claude-marketplace
-```
-
-Then run the command `/plugin` to enable, disable, update, or uninstall a specific plugin in this marketplace at your preferred scope (see [Appendix: Plugin Scope](#appendix-plugin-scope)).
-
-```text
-Use the shadcn-ui skill to build this form with proper validation and accessible components.
-```
-
 ## Plugins Included
 
 Self-authored plugins and skills repackaged from other sources, collected here for modular control.
@@ -23,10 +9,44 @@ Self-authored plugins and skills repackaged from other sources, collected here f
 | Plugin | Origin | Status |
 | :----- | :----- | :----- |
 | [shadcn-ui](./plugins/shadcn-ui) | This repo | ✅ Self-authored (Shadcn best practices) |
-| [cc-whats-new](./plugins/cc-whats-new) | This repo | ✅ Self-authored (Claude Code whats new) |
-| [cc-marketplaces-plugins](./plugins/cc-marketplaces-plugins) | This repo | ✅ Self-authored (Show whats enabled) |
+| [cc-whats-new](./plugins/cc-whats-new) | This repo | ✅ Self-authored (Claude Code what's new) |
+| [cc-marketplaces-plugins](./plugins/cc-marketplaces-plugins) | This repo | ✅ Self-authored (Show what's enabled) |
 | [skill-creator](./plugins/skill-creator) | [anthropics/skills](https://github.com/anthropics/skills) | ✅ Duplicated (don't want other skills) |
 | [tailwindcss](./plugins/tailwindcss) | [einverne/dotfiles](https://github.com/einverne/dotfiles) | Remove (uses TW v3) |
+
+## Usage
+
+**Add this marketplace to your Claude Code:**
+
+```shell
+/plugin marketplace add michellepace/my-claude-marketplace
+```
+
+Then run the command `/plugin` to enable, disable, update, or uninstall a specific plugin in this marketplace at your preferred scope (see [Appendix 1: Plugin Scope](#appendix-1-plugin-scope)).
+
+📌 EXAMPLE 1 (assuming `shadcn-ui` plugin is enabled):
+
+```text
+Use the shadcn-ui plugin to build this form with proper validation and accessible components.
+```
+
+💡 *Claude Code automatically invokes relevant skills when a task matches their description — this follows the principle of progressive disclosure of context. However, I find it more reliable to explicitly mention the skill/plugin.*
+
+📌 EXAMPLE 2 (assuming `cc-whats-new` plugin is enabled):
+
+Instruct Claude Code:
+
+```text
+What is new this week in Claude Code, use the cc-whats-new plugin  
+```
+
+OR since the plugin just contains a command, run it directly:
+
+```bash
+/cc-whats-new:explain this week
+
+/cc-whats-new:explain 2.1.7
+```
 
 ## About Plugins and Marketplaces
 
@@ -85,9 +105,9 @@ To share plugin configuration with your team via source control, add this to `.c
 }
 ```
 
-This registers the marketplace and enables 4 plugins (tailwindcss disabled).
+This registers the marketplace and sets 4 plugins enabled, 1 disabled (tailwind).
 
-## Appendix: Plugin Scope
+## Appendix 1: Plugin Scope
 
 Plugins can be enabled at four scope levels. Higher scopes override lower ones (managed > local > project > user).
 
@@ -97,3 +117,14 @@ Plugins can be enabled at four scope levels. Higher scopes override lower ones (
 | **project** | `.claude/settings.json` | All collaborators on the repo | Yes (committed to git) |
 | **local** | `.claude/settings.local.json` | You, in this repo only | No (gitignored) |
 | **managed** | `managed-settings.json` (system) | All users on the machine | Yes (deployed by IT) |
+
+## Appendix 2: Developing Plugins
+
+To test a plugin you're working on, run Claude Code with `--plugin-dir`:
+
+```shell
+# Example: testing the cc-whats-new plugin
+claude --plugin-dir /home/mp/projects/my-claude-marketplace/plugins/cc-whats-new
+```
+
+This loads the plugin directly from your local directory without installing it, so you can test changes immediately without publishing to your marketplace first. Edit your files, restart Claude Code, test. No install/uninstall needed.
